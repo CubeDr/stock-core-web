@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock</title>
+    <style>
+        .row {
+            padding: 8px;
+        }
+
+        .row:nth-child(even) {
+            background-color: aliceblue;
+        }
+
+        .time {
+            margin: 0 24px;
+        }
+
+        .message {
+
+        }
+    </style>
+</head>
+<body>
+<div id="logs"></div>
+<template id="row">
+    <div class="row">
+        <span class="time"></span>
+        <span class="message"></span>
+    </div>
+</template>
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import {initializeApp} from 'https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js';
+    import {getDatabase, ref, onChildAdded} from "https://www.gstatic.com/firebasejs/9.17.2/firebase-database.js"
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    const firebaseConfig = {
+        apiKey: 'AIzaSyCNL8_6auR4zteJsbWepRnLV0N8SRtkXzQ',
+        authDomain: 'autostock-6a5d7.firebaseapp.com',
+        databaseURL: 'https://autostock-6a5d7-default-rtdb.asia-southeast1.firebasedatabase.app',
+        projectId: 'autostock-6a5d7',
+        storageBucket: 'autostock-6a5d7.appspot.com',
+        messagingSenderId: '426238302191',
+        appId: '1:426238302191:web:9ba3cdc6de59ca5285881a',
+        measurementId: 'G-EP0XP6VM7B'
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const logsRef = ref(database, 'logs');
+
+    const logs = document.getElementById('logs');
+    onChildAdded(logsRef, snapshot => {
+        const {time, message} = snapshot.val();
+
+        const row = document.querySelector('#row');
+        const clone = document.importNode(row.content, true);
+        const spans = clone.querySelectorAll('span');
+
+        const d = new Date(0);
+        d.setMilliseconds(time);
+        spans[0].textContent = d.toLocaleTimeString();
+        spans[1].textContent = message;
+
+        logs.insertBefore(clone, logs.firstChild);
+    });
+</script>
+</body>
+</html>
