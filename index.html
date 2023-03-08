@@ -14,6 +14,8 @@
 
         .time {
             margin: 0 24px;
+            display: inline-block;
+            width: 150px;
         }
 
         .message {
@@ -60,7 +62,7 @@
 
         const d = new Date(0);
         d.setMilliseconds(time);
-        spans[0].textContent = d.toLocaleTimeString();
+        spans[0].textContent = d.toLocaleTimeString() + '.' + d.getMilliseconds().toString().padStart(3, '0');
         spans[1].textContent = message;
 
         logs.insertBefore(clone, logs.firstChild);
